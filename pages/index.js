@@ -22,15 +22,15 @@ export default function Home() {
       <footer className={styles.footer}>
         <div className={styles.grow}></div>
         <div className={styles.tab}>
-          <FontAwesomeIcon icon={faScrewdriver} className="fa-1x"/>
+          <FontAwesomeIcon icon={faScrewdriver}  size="lg"/>
           <span>Afinador</span>
         </div>
         <div className={styles.tab}>
-          <FontAwesomeIcon icon={faHeartbeat} className="fa-1x"/>
+          <FontAwesomeIcon icon={faHeartbeat} size="lg"/>
           <span>Metronomo</span>
         </div>        
         <div className={styles.tab}>
-          <FontAwesomeIcon icon={faInfinity} className="fa-1x"/>
+          <FontAwesomeIcon icon={faInfinity} size="lg"/>
           <span>Loop</span>
         </div>        
         <div className={styles.grow}></div>        
