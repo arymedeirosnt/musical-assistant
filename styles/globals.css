@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto:wght@100&display=swap');
+
 html,
 body {
   padding: 0;
@@ -77,8 +79,60 @@ a {
 
 .panel {
   display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .panel.active{
   display: flex;
 }
+
+.flex{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.mostrador{
+	width: 100px;
+	height: 70px;
+	background-color: #000000;
+	-moz-box-shadow:    inset 0 0 10px #FFFFFF;
+   -webkit-box-shadow: inset 0 0 10px #FFFFFF;
+   box-shadow:         inset 0 0 10px #FFFFFF;
+   color: #FFFFFF;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 10px;
+}
+
+.mostrador span {
+  font-family: 'Orbitron';
+  color: #FFFFFF;
+  font-size: 24px;
+}
+
+.onoff {
+  margin-top: 20px;
+}
+
+.control{
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  top: -160px;
+  left: 100px;
+}
+
+.control-met{
+  left: 65px;
+}
+
+.control-met svg{
+  margin: 10px;
+  position: relative;
+  top: 15px;
+} 

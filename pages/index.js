@@ -4,9 +4,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faScrewdriver, faInfinity, faHeartbeat } from '@fortawesome/free-solid-svg-icons'
 import { config, dom } from "@fortawesome/fontawesome-svg-core";
 import  Tabs  from "../pages/components/Tabs";
+import dynamic from 'next/dynamic';
 
 config.autoAddCss = false;
 
+const DynamicTuner = dynamic(
+  () => import('./components/Tuner'),
+  { ssr: false }
+)
+
+const DynamicMwtronome = dynamic(
+  () => import('./components/Metronome'),
+  { ssr: false }
+)
 
 
 export default function Home() {
@@ -20,10 +30,10 @@ export default function Home() {
 
       <main className="main">
         <div id="tuner" className="panel active">
-          <h1>Afinador</h1>
+          <DynamicTuner />
         </div>
         <div id="metronome" className="panel">
-          <h1>Metronomo</h1>
+          <DynamicMwtronome />
         </div>
         <div id="loop" className="panel">
           <h1>Loop</h1>
