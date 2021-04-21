@@ -198,3 +198,10 @@ footer {
   text-align: center;
   font-weight: bold;
 }
+
+.version{
+  width: 100%;
+  position: absolute;
+  bottom: 100px;
+  text-align: center;
+}

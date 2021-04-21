@@ -109,6 +109,12 @@ class Tuner extends React.Component {
                         <span>{this.state.note}</span>
                     </div>
                 </div>
+                <div className="stripe">
+                    <div>
+                        Afinador
+                    </div>
+                </div>
+
             </div>
         )
     }

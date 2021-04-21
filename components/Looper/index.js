@@ -26,6 +26,12 @@ class Looper extends React.Component {
             <div>
                 <h1>Looper Component</h1>
                 <h2>{this.state.loaded ? "Ok" : "NADA"}</h2>
+                <div className="stripe">
+                <div>
+                    Looper
+                </div>
+            </div>
+
             </div> 
         )
     }

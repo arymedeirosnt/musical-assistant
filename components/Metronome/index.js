@@ -108,6 +108,11 @@ class Metronome extends React.Component {
                         <span>{this.state.signature ===4 ? '4/4' : '3/4'}</span>
                         <TempoButton disabled={ this.state.onOff} onChange={this.tickChange}/>
                     </div>
+                    <div className="stripe">
+                        <div>
+                            Metronomo
+                        </div>
+                    </div>
 
                 </div>
         )
