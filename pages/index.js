@@ -43,9 +43,6 @@ export default function Home() {
         </div>
       </main>
 
-      <div className="version">
-        Versão 1.01 build 001
-      </div>      
       <footer className="footer">
         <div className="grow"></div>
         <Tabs></Tabs>
