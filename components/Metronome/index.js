@@ -91,8 +91,11 @@ class Metronome extends React.Component {
                         }
                     ]}
                     />
+                    <div className="flex">
+                        
+                    </div>
                     <OnOffButton onChange={this.onOffChanged}></OnOffButton>
-                    <div className="control control-met">
+                    <div className="control control-met f">
                         <div id="tempo-down" className={ 'tempo '+(this.state.onOff ? "disabled": "")} onClick={this.tempoDown}>
                             <FontAwesomeIcon icon={faMinus} />
                         </div>

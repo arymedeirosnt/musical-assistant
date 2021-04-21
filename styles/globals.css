@@ -125,11 +125,11 @@ footer {
 }
 
 .control{
-  display: flex;
-  flex-direction: row;
-  position: relative;
+  display: block;
   top: -160px;
   left: 100px;
+  position: relative;
+  flex-grow: 0;
 }
 
 .control-met{
