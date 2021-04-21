@@ -34,7 +34,7 @@ footer {
   justify-content: center;
   align-items: center;
   font-size: 14px;
-  position: absolute;
+  position: fixed;
   bottom: 0;
 }
 
@@ -63,6 +63,7 @@ footer {
 .panel {
   padding-top: 50px;
   display: none;
+  min-height: 530px;
 }
 
 .panel.active{
@@ -201,7 +202,7 @@ footer {
 
 .version{
   width: 100%;
-  position: absolute;
+  position: fixed;
   bottom: 100px;
   text-align: center;
 }
