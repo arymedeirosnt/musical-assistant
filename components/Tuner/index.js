@@ -102,14 +102,14 @@ class Tuner extends React.Component {
                         }
 
                     ]}
-                    />
-                    <OnOffButton onChange={this.onOffChanged}></OnOffButton>
-                    <div className="control">
-                        <div className="mostrador">
-                            <span>{this.state.note}</span>
-                        </div>
+                />
+                <OnOffButton onChange={this.onOffChanged}></OnOffButton>
+                <div className="control">
+                    <div className="mostrador">
+                        <span>{this.state.note}</span>
                     </div>
                 </div>
+            </div>
         )
     }
 }
