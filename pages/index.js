@@ -1,23 +1,20 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faScrewdriver, faInfinity, faHeartbeat } from '@fortawesome/free-solid-svg-icons'
 import { config, dom } from "@fortawesome/fontawesome-svg-core";
-import  Tabs  from "../pages/components/Tabs";
+import  Tabs  from "../components/Tabs";
 import dynamic from 'next/dynamic';
+
 
 config.autoAddCss = false;
 
 const DynamicTuner = dynamic(
-  () => import('./components/Tuner'),
+  () => import('../components/Tuner'),
   { ssr: false }
 )
 
-const DynamicMwtronome = dynamic(
-  () => import('./components/Metronome'),
+const DynamicMetronome = dynamic(
+  () => import('../components/Metronome'),
   { ssr: false }
 )
-
 
 export default function Home() {
   return (
@@ -33,7 +30,7 @@ export default function Home() {
           <DynamicTuner />
         </div>
         <div id="metronome" className="panel">
-          <DynamicMwtronome />
+          <DynamicMetronome />
         </div>
         <div id="loop" className="panel">
           <h1>Loop</h1>

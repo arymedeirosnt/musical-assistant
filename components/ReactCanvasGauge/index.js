@@ -1,19 +1,11 @@
 import React from "react";
-import { RadialGauge, LinearGauge } from "canvas-gauges";
+//import { RadialGauge } from "canvas-gauges";
 
 class ReactCanvasGauge extends React.Component {
   componentDidMount() {
+    const MyWindowDependentLibrary = require( 'canvas-gauges' );
     const options = { ...this.props, renderTo: this.canvasRef };
-    switch (this.props.gaugeType) {
-      case "LINEAR":
-        this.gauge = new LinearGauge(options).draw();
-        break;
-      case "RADIAL":
-        this.gauge = new RadialGauge(options).draw();
-        break;
-      default:
-        break;
-    }
+    this.gauge = new MyWindowDependentLibrary.RadialGauge(options).draw();
   }
 
   componentWillReceiveProps(props) {
@@ -21,6 +13,7 @@ class ReactCanvasGauge extends React.Component {
       this.gauge.update({ value: props.value, animation: true });
     }
   }
+
   render() {
     return <canvas ref={node => (this.canvasRef = node)} />;
   }

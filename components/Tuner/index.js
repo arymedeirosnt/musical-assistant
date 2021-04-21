@@ -90,7 +90,7 @@ class Tuner extends React.Component {
                             "color": "rgba(255, 255, 0, .75)"
                         },
                         {
-                            "from": 60,
+                            "from": 70,
                             "to": 80,
                             "color": "rgba(255, 165, 0, .75)"
                         },

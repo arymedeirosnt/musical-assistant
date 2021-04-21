@@ -1,13 +1,20 @@
 import React from "react";
-import ReactCanvasGauge from "../ReactCanvasGauge";
 import OnOffButton from "../OnOffButton";
-import { WorkerMetronome } from '../metronome.js';
+// import ReactCanvasGauge from "../ReactCanvasGauge";
+
+import { WorkerMetronome } from '../metronome_base.js';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
-//import { config, dom } from "@fortawesome/fontawesome-svg-core";
+import { config, dom } from "@fortawesome/fontawesome-svg-core";
+import dynamic from 'next/dynamic';
 
-//config.autoAddCss = false;
+config.autoAddCss = false;
 
+const DynamicGauge = dynamic(
+    () => import('../ReactCanvasGauge'),
+    { ssr: false }
+  )
+  
 
 class Metronome extends React.Component {
     constructor(props){
@@ -16,7 +23,6 @@ class Metronome extends React.Component {
         this.metronome = null;
         this.onOffChanged = this.onOffChanged.bind(this);
         this.beat = this.beat.bind(this);
-        this.value = 0
     }
 
     beat(){
@@ -38,7 +44,7 @@ class Metronome extends React.Component {
     render() {
         return (
             <div>
-                <ReactCanvasGauge
+                <DynamicGauge
                     key="radialGauge"
                     width={300}
                     height={300}
