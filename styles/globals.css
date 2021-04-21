@@ -23,18 +23,6 @@ a {
   -ms-user-select: none; 
   user-select: none;
   min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: stretch;
-}
-
-main {
-  flex-grow: 1;
-}
-
-header, main, footer {
-  flex-shrink: 0;
 }
 
 
@@ -72,30 +60,30 @@ footer {
   flex-grow: 3;
 }
 
-@media (max-width: 600px) {
-  .grid {
-    width: 100%;
-    flex-direction: column;
-  }
-}
-
 .panel {
   padding-top: 50px;
   display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 .panel.active{
-  display: flex;
+  display: block;
 }
 
 .flex{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  display: block;
+}
+
+.center {
+  text-align: center;
+}
+
+.center canvas{
+  margin-left: auto;
+}
+
+#tuner-control{
+  position: relative;
+  top: -160px;
 }
 
 .mostrador{
@@ -107,6 +95,7 @@ footer {
    box-shadow:         inset 0 0 10px #FFFFFF;
    color: #FFFFFF;
    border-radius: 10px;
+   margin: auto auto;
 }
 
 .mostrador span {
@@ -125,15 +114,20 @@ footer {
 }
 
 .control{
-  display: block;
-  top: -160px;
-  left: 100px;
-  position: relative;
-  flex-grow: 0;
+  display: inline-block;
 }
 
 .control-met{
-  left: 65px;
+  position: relative;
+  top: -150px;
+}
+
+.control-met div{
+  float: left;
+}
+
+.clear {
+  clear: both;
 }
 
 .control-met svg{
@@ -161,12 +155,12 @@ footer {
   height: 80px;
   border-radius: 50% 50%;
   background-color: black;
-  position: relative;
-  top: -295px;
-  left: 200px;
 	-moz-box-shadow:    inset 0 0 10px #FFFFFF;
    -webkit-box-shadow: inset 0 0 10px #FFFFFF;
    box-shadow:         inset 0 0 10px #FFFFFF;
+   position: relative;
+   top: -300px;
+   left: 230px;
 }
 
 .tempo-select span{

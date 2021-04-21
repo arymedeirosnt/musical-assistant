@@ -104,7 +104,7 @@ class Tuner extends React.Component {
                     ]}
                 />
                 <OnOffButton onChange={this.onOffChanged}></OnOffButton>
-                <div className="control flex">
+                <div id="tuner-control" className="control">
                     <div className="mostrador">
                         <span>{this.state.note}</span>
                     </div>
