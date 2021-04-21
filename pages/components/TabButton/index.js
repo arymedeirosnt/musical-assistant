@@ -13,7 +13,6 @@ class TabButton extends React.Component {
     }
   // Declarar uma nova variável de state, na qual chamaremos de "count"
   render() {
-      console.log(this.props);
     return <div id={this.props.id} className={'tab '+this.props.className} onClick={this.props.handleClick}>
                 <FontAwesomeIcon icon={this.icon}  size="lg"/>
                 <span>{this.props.title}</span>
