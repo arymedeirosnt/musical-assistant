@@ -16,6 +16,12 @@ const DynamicMetronome = dynamic(
   { ssr: false }
 )
 
+const DynamicLooper = dynamic(
+  () => import('../components/Looper'),
+  { ssr: false }
+)
+
+
 export default function Home() {
   return (
     <div className="container">
@@ -33,9 +39,15 @@ export default function Home() {
           <DynamicMetronome />
         </div>
         <div id="loop" className="panel">
-          <h1>Loop</h1>
+          <DynamicLooper />
         </div>
       </main>
+
+      <div className="stripe">
+        <div>
+          1.01d
+        </div>
+      </div>
 
       <footer className="footer">
         <div className="grow"></div>
