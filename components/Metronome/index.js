@@ -1,6 +1,6 @@
 import React from "react";
 import OnOffButton from "../OnOffButton";
-// import ReactCanvasGauge from "../ReactCanvasGauge";
+import TempoButton from "../Tempo";
 
 import { WorkerMetronome } from '../metronome_base.js';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,9 +19,12 @@ const DynamicGauge = dynamic(
 class Metronome extends React.Component {
     constructor(props){
         super(props);
-        this.state = { value: 50, tempo: 60, onOff: false }
+        this.state = { value: 50, tempo: 60, onOff: false, signature: 4 }
         this.metronome = null;
         this.onOffChanged = this.onOffChanged.bind(this);
+        this.tickChange = this.tickChange.bind(this);
+        this.tempoDown = this.tempoDown.bind(this);
+        this.tempoUp = this.tempoUp.bind(this);
         this.beat = this.beat.bind(this);
     }
 
@@ -31,7 +34,7 @@ class Metronome extends React.Component {
 
     async onOffChanged(){
         if ( !this.state.onOff ){
-            this.metronome = new WorkerMetronome(this.state.tempo);
+            this.metronome = new WorkerMetronome(this.state.tempo,this.state.signature);
             this.metronome.start(this.beat);
     	}
 		else{
@@ -39,6 +42,21 @@ class Metronome extends React.Component {
 		}
 		this.setState({ onOff : !this.state.onOff, value: 50 });		
 
+    }
+
+    tickChange(is3x4){
+        this.setState({signature : is3x4 ? 3 : 4});
+    }
+
+
+    tempoDown(){
+         if (!this.state.onOff && this.state.tempo > 40 )
+            this.setState({ tempo: this.state.tempo -1});
+    }
+
+    tempoUp(){
+        if (!this.state.onOff && this.state.tempo < 218 )
+           this.setState({ tempo: this.state.tempo +1});
     }
 
     render() {
@@ -75,11 +93,19 @@ class Metronome extends React.Component {
                     />
                     <OnOffButton onChange={this.onOffChanged}></OnOffButton>
                     <div className="control control-met">
-                        <FontAwesomeIcon icon={faMinus} />
+                        <div id="tempo-down" className={ 'tempo '+(this.state.onOff ? "disabled": "")} onClick={this.tempoDown}>
+                            <FontAwesomeIcon icon={faMinus} />
+                        </div>
                         <div className="mostrador">
                             <span>{this.state.tempo}</span>
                         </div>
-                        <FontAwesomeIcon icon={faPlus} />
+                        <div id="tempo-up" className={ 'tempo '+(this.state.onOff ? "disabled": "")}>
+                            <FontAwesomeIcon icon={faPlus} onClick={this.tempoUp}/>
+                        </div>
+                    </div>
+                    <div className="tempo-select">
+                        <span>{this.state.signature ===4 ? '4/4' : '3/4'}</span>
+                        <TempoButton disabled={ this.state.onOff} onChange={this.tickChange}/>
                     </div>
 
                 </div>
