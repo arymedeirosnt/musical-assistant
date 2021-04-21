@@ -45,7 +45,7 @@ export default function Home() {
 
       <div className="stripe">
         <div>
-          1.01d
+          1.01e
         </div>
       </div>
 
