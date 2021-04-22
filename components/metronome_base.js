@@ -3,10 +3,13 @@
  * More like a "click on command" class. 
  */
 class BaseMetronome {
-    constructor(tempo = 60,signature=4) {
+    constructor(tempo = 60,signature=4, compass=0) {
       this.tempo = tempo;
       this.signature = signature;
       this.playing = false;
+      this.compass = compass;
+      this.recording = false;
+      this.mustCheck = false;
       
       this.audioCtx = null;
       this.tick = null;
@@ -16,6 +19,9 @@ class BaseMetronome {
       this.tock = null;
       this.tockVolume = null;
       this.ticktock = 1;
+
+      this.startRecordFn = ()=>{};
+      this.stopRecordFn = ()=>{};
     }
     
     initAudio() {
@@ -46,8 +52,12 @@ class BaseMetronome {
       
     }
     
-    click(callbackFn) {
+    click(callbackFn,startRecordFn=null,stopRecordFn=null) {
       const time = this.audioCtx.currentTime;
+
+      this.startRecordFn = startRecordFn || this.startRecordFn;
+      this.stopRecordFn = stopRecordFn || this.stopRecordFn;
+
       this.clickAtTime(time);
       
       if (callbackFn) {
@@ -58,23 +68,42 @@ class BaseMetronome {
     clickAtTime(time) {
 
 
-      // Silence the click.
-      this.tickVolume.gain.cancelScheduledValues(time);
-      this.tickVolume.gain.setValueAtTime(0, time);
+      if ( !this.recording){
+        // Silence the click.
+        this.tickVolume.gain.cancelScheduledValues(time);
+        this.tickVolume.gain.setValueAtTime(0, time);
 
-      // Silence the click.
-      this.tockVolume.gain.cancelScheduledValues(time);
-      this.tockVolume.gain.setValueAtTime(0, time);
-      
+        // Silence the click.
+        this.tockVolume.gain.cancelScheduledValues(time);
+        this.tockVolume.gain.setValueAtTime(0, time);
+      }
 
       if ( this.ticktock === this.signature ){
-        this.tockVolume.gain.linearRampToValueAtTime(1, time + .001);
-        this.tockVolume.gain.linearRampToValueAtTime(0, time + .001 + .01);
-        this.ticktock = 0;
+        this.mustCheck = true;
+        if ( !this.recording ){
+          this.tockVolume.gain.linearRampToValueAtTime(1, time + .001);
+          this.tockVolume.gain.linearRampToValueAtTime(0, time + .001 + .01);
+        }
+        else{
+          this.compass--;
+        }
+        this.ticktock = 0;  
       }
       else{
-        this.tickVolume.gain.linearRampToValueAtTime(1, time + .001);
-        this.tickVolume.gain.linearRampToValueAtTime(0, time + .001 + .01);
+          if ( this.mustCheck ){
+            if ( !this.recording ){
+              this.startRecordFn();
+              this.recording = true;
+            }
+            else if ( this.compass == 0 ){
+              this.stopRecordFn();
+            }
+          }
+          if ( !this.recording ){
+            this.tickVolume.gain.linearRampToValueAtTime(1, time + .001);
+            this.tickVolume.gain.linearRampToValueAtTime(0, time + .001 + .01);
+          }
+
       }
       this.ticktock++
     }
@@ -87,46 +116,27 @@ class BaseMetronome {
     stop(callbackFn) {
       this.playing = false;
       this.tickVolume.gain.value = 0;
+      this.tockVolume.gain.value = 0;
     }
   }
   
-  /* 
-   * Scheduling is done by calling setInterval() on the main thread.
-   */
-  class SetIntervalMetronome extends BaseMetronome {
-    constructor(tempo,signature) {
-      super(tempo,signature);
-      this.intervalId = null;
-    }
-    
-    start(callbackFn) {
-      super.start();
-      const timeoutDuration = (60 / this.tempo) * 1000;
-      this.intervalId = setInterval(() => this.click(callbackFn), timeoutDuration);
-    }
-    
-    stop() {
-      super.stop();
-      clearInterval(this.intervalId);
-    }
-  }
   
   /* 
    * Scheduling is done by calling setInterval() in a worker thread.
    */
   class WorkerMetronome extends BaseMetronome {
-    constructor(tempo,signature) {
-      super(tempo,signature);
+    constructor(tempo,signature,compass) {
+      super(tempo,signature,compass);
       this.worker = new Worker('worker.js');
     }
     
-    start(callbackFn) {
+    start(callbackFn,startRecordFn,stopRecordFn) {
       super.start();
       const timeoutDuration = (60 / this.tempo) * 1000;
       
       this.worker.postMessage({interval: timeoutDuration});
       this.worker.postMessage('start');
-      this.worker.onmessage = () => this.click(callbackFn); 
+      this.worker.onmessage = () => this.click(callbackFn,startRecordFn,stopRecordFn); 
     }
     
     stop() {
@@ -135,30 +145,5 @@ class BaseMetronome {
     }
   }
   
-  /* 
-   * Scheduling is done by prescheduling all the audio events, and
-   * letting the WebAudio scheduler actually do the scheduling.
-   */
-  class ScheduledMetronome extends BaseMetronome {
-    constructor(tempo, signature,ticks = 1000) {
-      super(tempo,signature);
-      this.scheduledTicks = ticks;
-    }
-    
-    start(callbackFn) {
-      super.start();
-      const timeoutDuration = (60 / this.tempo);
-      
-      let now = this.audioCtx.currentTime;
-        
-      // Schedule all the clicks ahead.
-      for (let i = 0; i < this.scheduledTicks; i++) {
-        this.clickAtTime(now);
-        const x = now;
-        setTimeout(() => callbackFn(x), now * 1000);
-        now += timeoutDuration;
-      }
-    }
-  }
   
-  export {SetIntervalMetronome, WorkerMetronome, ScheduledMetronome};
+  export { WorkerMetronome };

@@ -3,6 +3,7 @@
 :root{
   --almost-white: rgb(247, 242, 242);
   --blue-color : #2693e6;
+  --dark-disabled: #505050;
 }
 
 html,
@@ -297,11 +298,11 @@ footer {
 }
 
 .rs-select .arrow-down.disabled{
-  border-color: #505050 transparent transparent transparent;
+  border-color: var(--dark-disabled) transparent transparent transparent;
 }
 
 .rs-select .arrow-up.disabled{
-  border-color: transparent transparent #505050 transparent; 
+  border-color: transparent transparent var(--dark-disabled) transparent; 
 }
 
 .looper-container{
@@ -321,6 +322,38 @@ footer {
   border-radius: 50%;
   box-shadow: 0 0 0 3px #e5e5e6, inset 0 0 0 4px #A0A0A0,inset 0 0 0 8px #e5e5e6;
   background-color: white;
+}
+
+.looper-main .lp-on-off {
+  width: 70px;
+  height: 70px;
+  position: relative;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #4b4b4b, inset 0 0 0 3px #A0A0A0,inset 0 0 0 5px #4b4b4b;
+  background-color: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.to-red{
+  animation: turnRed 0.2s 1;
+}
+
+.to-green{
+  animation: turnGreen 0.2s 1;
+}
+
+
+@keyframes turnRed {
+  from {background-color: black;}
+  to {background-color: rgb(207, 14, 14);}
+}
+
+@keyframes turnGreen {
+  from {background-color: black;}
+  to {background-color: rgb(49, 161, 15);}
 }
 
 .looper-main .btn-bpm {
@@ -365,9 +398,18 @@ footer {
   border-right: 1px solid var(--almost-white);
 }
 
+.get-compass .btn-down:active{
+  transform : translate(-1px, -1px);
+}
+
 .get-compass .btn-up{
   border-left: 1px solid var(--almost-white);
 }
+
+.get-compass .btn-up:active{
+  transform : translate(1px, -1px);
+}
+
 
 .get-compass .compass-ct{
   float: left;
@@ -385,12 +427,20 @@ footer {
   border-color: transparent var(--almost-white) transparent transparent;
 }
 
+.get-compass .arrow-left.disabled{
+  border-color: transparent var(--dark-disabled) transparent transparent;
+}
+
 .get-compass .arrow-right {
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 5px 0 5px 10px;
   border-color: transparent transparent transparent var(--almost-white);
+}
+
+.get-compass .arrow-right.disabled {
+  border-color: transparent transparent transparent var(--dark-disabled);
 }
 
 .get-compass .display{
@@ -419,11 +469,4 @@ footer {
 }
 
 
-.lp-on-off {
-  width: 70px;
-  height: 70px;
-  position: relative;
-  border-radius: 50%;
-  box-shadow: 0 0 0 2px #4b4b4b, inset 0 0 0 3px #A0A0A0,inset 0 0 0 5px #4b4b4b;
-  background-color: black;
-}
+
