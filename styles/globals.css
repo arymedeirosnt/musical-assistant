@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto:wght@100&display=swap');
 
+:root{
+  --almost-white: rgb(247, 242, 242);
+}
+
 html,
 body {
   padding: 0;
@@ -36,6 +40,7 @@ footer {
   font-size: 16px;
   position: fixed;
   bottom: 0;
+  color: #0e0e0e;
   background-color: white;  
 }
 
@@ -201,9 +206,89 @@ footer {
   font-weight: bold;
 }
 
-.version{
-  width: 100%;
-  position: fixed;
-  bottom: 100px;
+.rs-select{
+  position: relative;
+  width: 90px;
+  height: 90px;
+}
+
+.rs-select .semi-up {
+  width: 90px;
+  height: 45px; 
+  border-top-left-radius: 100px;
+  border-top-right-radius: 100px;
+  border: 2px outset gray;
+  border-bottom: 1px solid var(--almost-white);
+  background-color: black;
+  
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.rs-select .semi-down {
+  width: 90px;
+  height: 45px; 
+  border-bottom-left-radius: 100px;
+  border-bottom-right-radius: 100px;
+  border: 2px outset grey;
+  border-top: 1px solid gray;
+  background-color: black;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.rs-select .rs-display{
+  display: block;
+  position: absolute;
+  top: 20px;
+  left:20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background-color: rgb(29, 29, 29);
+  color: var(--almost-white);
   text-align: center;
+  font-size: 10px;
+  line-height: 20px;
+  border-top: 1px solid var(--almost-white);
+  border-bottom: 1px solid grey;
+}
+
+.rs-select .rs-display div{
+  border-top: 1px solid grey;
+}
+
+.rs-select .rs-value{
+  font-family: 'Orbitron';
+  font-size: 14px;
+  line-height: 20px;
+  margin-top: 3px;
+  border-bottom: 1px solid gray;
+  border-top: 0 !important;
+}
+
+.rs-select .arrow-up{
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 5px 10px 5px;
+  border-color: transparent transparent var(--almost-white) transparent;
+  position:absolute;
+  left: 40px;
+  top: 5px;
+}
+
+.rs-select .arrow-down{
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 5px 0 5px;
+  border-color: #ffffff transparent transparent transparent;
+  position:absolute;
+  left: 40px;
+  bottom: 5px;
 }

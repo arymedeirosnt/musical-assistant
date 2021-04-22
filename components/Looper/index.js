@@ -1,4 +1,5 @@
 import React from "react";
+import RoundSelector from "../RoundSelector";
 
 class Looper extends React.Component {
     constructor(props){
@@ -24,7 +25,8 @@ class Looper extends React.Component {
     render(){
         return (
             <div>
-                <h1>Looper Component</h1>
+                <RoundSelector label="BPM"/>
+                <RoundSelector label="TEMPO" value="3/4" />
                 <h2>{this.state.loaded ? "Ok" : "NADA"}</h2>
                 <div className="stripe">
                 <div>
