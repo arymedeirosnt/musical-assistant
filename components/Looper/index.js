@@ -1,6 +1,7 @@
 import React from "react";
 import RoundSelector from "../RoundSelector";
-
+import GetCompass from "../GetCompass";
+import LooperOnOff from "../LooperOnOff";
 class Looper extends React.Component {
     constructor(props){
         super(props);
@@ -24,10 +25,21 @@ class Looper extends React.Component {
 
     render(){
         return (
-            <div>
-                <RoundSelector label="BPM"/>
-                <RoundSelector label="TEMPO" value="3/4" />
-                <h2>{this.state.loaded ? "Ok" : "NADA"}</h2>
+            <div className="looper-container">
+                <div className="looper-main">
+                    <div className="dsp-compass">
+                        <GetCompass />
+                    </div>
+                    <div className="btn-bpm">
+                        <RoundSelector label="BPM" value="60" min="40" max="218" />
+                    </div>
+                    <div className="btn-tempo">
+                        <RoundSelector label="TEMPO" value="1" values={["3/4","4/4"]} />
+                    </div>
+                    <div className="btn-on-off">
+                        <LooperOnOff />
+                    </div>
+                </div>
                 <div className="stripe">
                 <div>
                     Looper

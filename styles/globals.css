@@ -2,6 +2,7 @@
 
 :root{
   --almost-white: rgb(247, 242, 242);
+  --blue-color : #2693e6;
 }
 
 html,
@@ -22,6 +23,7 @@ a {
 }
 
 .container {
+  margin-top: 30px;
   -webkit-user-select: none; 
   -moz-user-select: none;
   -ms-user-select: none; 
@@ -55,7 +57,7 @@ footer {
 }
 
 .tab.active{
-  color: rgb(104, 204, 250)
+  color: var(--blue-color);
 }
 
 .tab.icon{
@@ -126,7 +128,7 @@ footer {
 
 .control-met{
   position: relative;
-  top: -150px;
+  top: -160px;
 }
 
 .control-met div{
@@ -166,7 +168,7 @@ footer {
    -webkit-box-shadow: inset 0 0 10px #FFFFFF;
    box-shadow:         inset 0 0 10px #FFFFFF;
    position: absolute;
-   top: 180px;
+   top: 210px;
    left: calc( 50% + 50px);
 }
 
@@ -282,6 +284,7 @@ footer {
   top: 5px;
 }
 
+
 .rs-select .arrow-down{
   width: 0;
   height: 0;
@@ -291,4 +294,136 @@ footer {
   position:absolute;
   left: 40px;
   bottom: 5px;
+}
+
+.rs-select .arrow-down.disabled{
+  border-color: #505050 transparent transparent transparent;
+}
+
+.rs-select .arrow-up.disabled{
+  border-color: transparent transparent #505050 transparent; 
+}
+
+.looper-container{
+  width: 100%;
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.looper-main{
+  width: 300px;
+  height: 300px;
+  position: relative;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px #e5e5e6, inset 0 0 0 4px #A0A0A0,inset 0 0 0 8px #e5e5e6;
+  background-color: white;
+}
+
+.looper-main .btn-bpm {
+  position: absolute;
+  top: 135px;
+  left: 40px;
+}
+
+.looper-main .btn-tempo{
+  position: absolute;
+  top: 135px;
+  left: 170px;
+}
+
+.looper-main .btn-on-off{
+  position: absolute;
+  top: 212px;
+  left: 115px;  
+}
+
+
+.get-compass {
+  position:relative;
+  background-color: black;
+  border-radius: 10px;
+  height: 80px;
+  width: 170px;
+  color : var(--almost-white);
+}
+
+.get-compass .btn-down, .get-compass .btn-up{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 100%;
+  text-align: center;
+  float: left;
+}
+
+.get-compass .btn-down{
+  border-right: 1px solid var(--almost-white);
+}
+
+.get-compass .btn-up{
+  border-left: 1px solid var(--almost-white);
+}
+
+.get-compass .compass-ct{
+  float: left;
+  width: 110px;
+  height: 100%;
+  border-left: 1px solid gray;
+  border-right: 1px solid grey;
+}
+
+.get-compass .arrow-left{
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 10px 5px 0;
+  border-color: transparent var(--almost-white) transparent transparent;
+}
+
+.get-compass .arrow-right {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 0 5px 10px;
+  border-color: transparent transparent transparent var(--almost-white);
+}
+
+.get-compass .display{
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron';
+  font-size: 26px;
+  position: relative;
+  top: 5px;
+}
+
+.get-compass .title{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  height: 50%;
+}
+
+.dsp-compass{
+  position: absolute;
+  top: 45px;
+  left: 65px;
+}
+
+
+.lp-on-off {
+  width: 70px;
+  height: 70px;
+  position: relative;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #4b4b4b, inset 0 0 0 3px #A0A0A0,inset 0 0 0 5px #4b4b4b;
+  background-color: black;
 }

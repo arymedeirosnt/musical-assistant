@@ -17,7 +17,7 @@ class OnOffButton extends React.Component {
     render() {
         return (
             <div className="flex onoff">
-                <Switch className="onOff" onChange={this.handleChange} checked={this.state.checked } />
+                <Switch className="onOff" onChange={this.handleChange} checked={this.state.checked } onColor="#2693e6" />
             </div>
         );
       }
