@@ -4,7 +4,7 @@ import Switch from "react-switch";
 class TempoButton extends React.Component {
     constructor(param){
         super(param);
-        this.state = { checked: false }
+        this.state = { checked: param.checked }
         this.handleChange = this.handleChange.bind(this);
     }
 

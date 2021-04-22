@@ -19,7 +19,9 @@ const DynamicGauge = dynamic(
 class Metronome extends React.Component {
     constructor(props){
         super(props);
-        this.state = { value: 50, tempo: 60, onOff: false, signature: 4 }
+
+        this.parameters = window.localStorage.getItem("metronome") ? JSON.parse(window.localStorage.getItem("metronome")) : { tempo: 60, signature: 4};
+        this.state = { value: 50, tempo: this.parameters.tempo, onOff: false, signature: this.parameters.signature };
         this.metronome = null;
         this.onOffChanged = this.onOffChanged.bind(this);
         this.tickChange = this.tickChange.bind(this);
@@ -45,18 +47,27 @@ class Metronome extends React.Component {
     }
 
     tickChange(is3x4){
-        this.setState({signature : is3x4 ? 3 : 4});
+        const signature = is3x4 ? 3 : 4;
+        this.setState({signature : signature});
+        this.parameters.signature = signature;
+        window.localStorage.setItem("metronome",JSON.stringify(this.parameters));
     }
 
 
     tempoDown(){
-         if (!this.state.onOff && this.state.tempo > 40 )
-            this.setState({ tempo: this.state.tempo -1});
+         if (!this.state.onOff && this.state.tempo > 40 ){
+            this.setState({ tempo: this.state.tempo - 1});
+            this.parameters.tempo = this.state.tempo - 1;
+            window.localStorage.setItem("metronome",JSON.stringify(this.parameters));
+        }
     }
 
     tempoUp(){
-        if (!this.state.onOff && this.state.tempo < 218 )
-           this.setState({ tempo: this.state.tempo +1});
+        if (!this.state.onOff && this.state.tempo < 218 ){
+           this.setState({ tempo: this.state.tempo + 1});
+           this.parameters.tempo = this.state.tempo + 1;
+           window.localStorage.setItem("metronome",JSON.stringify(this.parameters));
+       }
     }
 
     render() {
@@ -106,7 +117,7 @@ class Metronome extends React.Component {
                     <div className="clear"></div>
                     <div className="tempo-select">
                         <span>{this.state.signature ===4 ? '4/4' : '3/4'}</span>
-                        <TempoButton disabled={ this.state.onOff} onChange={this.tickChange}/>
+                        <TempoButton disabled={ this.state.onOff} onChange={this.tickChange} checked={this.state.signature===3}/>
                     </div>
                     <div className="stripe">
                         <div>

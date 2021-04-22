@@ -29,27 +29,25 @@ class RoundSelector extends React.Component {
         const value = this.state.value - 1;
         if ( this.props.values ){
             this.setState({value: value, canUp : value > 0, canDown : value < this.props.values.length-1 });
-            this.onChange(this.props.values[value]);
         }
         else{
             this.setState({ value: value, canUp: value > this.min, canDown: value < this.max });
-            this.onChange(value);
         }
+        this.onChange(value);
     }
 
-    onDown(){
+        onDown(){
         if ( !this.state.canDown )
             return;
 
         const value = this.state.value + 1
         if (this.props.values ){
             this.setState({value: value, canUp : value > 0, canDown: value < this.props.values.length-1});
-            this.onChange(this.props.values[value]);
         }
         else{
             this.setState({ value: value, caUp: value > this.min, canDown: value < this.max});
-            this.onChange(value);
         }
+        this.onChange(value);
     }
 
     render(){

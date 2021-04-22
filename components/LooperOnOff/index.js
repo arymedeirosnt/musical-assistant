@@ -7,7 +7,7 @@ class LooperOnOff extends React.Component {
 
     render(){
         return (
-            <div class="lp-on-off"></div>
+            <div className="lp-on-off"></div>
         )
     }
 }

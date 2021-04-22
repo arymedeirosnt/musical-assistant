@@ -8,19 +8,18 @@ class GetCompass extends React.Component {
     render(){
         return (
             <div className="get-compass">
-                <div class="btn-down">
-                    <span class="arrow-left"></span>
+                <div className="btn-down">
+                    <span className="arrow-left"></span>
                 </div>
-                <div class="compass-ct">
+                <div className="compass-ct">
                     <div className="display">
                         12
                     </div>
                     <div className="title">COMPASSOS</div>
                 </div>
-                <div class="btn-up">
-                    <span class="arrow-right"></span>
+                <div className="btn-up">
+                    <span className="arrow-right"></span>
                 </div>
-
             </div>
         )
     }
