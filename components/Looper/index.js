@@ -4,31 +4,30 @@ import GetCompass from "../GetCompass";
 import { WorkerMetronome } from '../metronome_base.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faPause } from '@fortawesome/free-solid-svg-icons'
-
+import { scheduled } from "rxjs";
 
 class Looper extends React.Component {
     constructor(props){
         super(props);
-        this.state = { loaded: false, cls: '' };
+        this.state = { cls: '' };
         this.running = false;
         this.recording = false;
         this.parameters = window.localStorage.getItem("looper") ? JSON.parse(window.localStorage.getItem("looper")) : { bpm: 60, tempo: 1, compass: 4 };
+        this.audioContext = null;
+        this.bpmChange = this.bpmChange.bind(this);
+        this.tempoChange = this.tempoChange.bind(this);
+        this.compassChange = this.compassChange.bind(this);
+        this.loopOnOff = this.loopOnOff.bind(this);
+        this.recordSetup = this.recordSetup.bind(this);
+        this.beat = this.beat.bind(this);
+        this.onAnimationEnd = this.onAnimationEnd.bind(this);
+        this.startRecord = this.startRecord.bind(this);
+        this.stopRecord = this.stopRecord.bind(this);
+        this.createBuffer = this.createBuffer.bind(this);
     }
 
     componentDidMount(){
-        const self = this;
         require("../recorder.js");
-        window.AudioContext = window.AudioContext || window.webkitAudioContext  || window.mozAudioContext || window.msAudioContext;
-        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-        window.URL = window.URL || window.webkitURL || window.mozURL  || window.msURL;    
-        this.context = new window.AudioContext();
-        this.context.createGain = this.context.createGain || this.context.createGainNode;
-        /*navigator.getUserMedia({audio: true}, function (stream) {
-            var input = self.context.createMediaStreamSource(stream);
-            self.recorder = new Recorder(input);
-            self.setState({ loaded: true});
-        },function(e){});*/
-
     }
 
     bpmChange(bpm){
@@ -48,17 +47,36 @@ class Looper extends React.Component {
 
     loopOnOff(){
         if ( !this.running ){
-            this.metronome = new WorkerMetronome(this.parameters.bpm,this.parameters.tempo+3,this.parameters.compass);
-            this.metronome.start(this.beat.bind(this),this.startRecord.bind(this),this.stopRecord.bind(this));
-            
+            const self = this;
+            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+            this.audioContext = new AudioContext();
+            this.audioContext.resume().then(()=>{
+                self.recordSetup();
+                navigator.getUserMedia({audio: true}, function (stream) {
+                    var input = self.audioContext.createMediaStreamSource(stream);
+                    self.recorder = new Recorder(input);
+                    self.metronome = new WorkerMetronome(self.parameters.bpm,self.parameters.tempo+3,self.parameters.compass);
+                    self.metronome.start(self.beat,self.startRecord,self.stopRecord);    
+                },function(e){});        
+            });
         }
         else{
+            this.setup.source.stop();
             this.metronome.stop();
-            this.metronnome = null;
-
+            this.metronome = null;
         }
         this.running = !this.running;
+    }
 
+    recordSetup(){
+        this.setup = {};
+        this.setup.source = this.audioContext.createBufferSource();
+        this.setup.gainNode = this.audioContext.createGain();
+        if (!this.setup.source.start) { this.setup.source.start = this.setup.source.noteOn; }
+        if (!this.setup.source.stop) { this.setup.source.stop = this.setup.source.noteOff; }
+        this.setup.source.connect(this.setup.gainNode);
+        this.setup.gainNode.connect(this.audioContext.destination);
+        this.setup.source.loop = true;
     }
 
     beat(){
@@ -71,9 +89,28 @@ class Looper extends React.Component {
 
     startRecord(){
         this.recording = true;
+        this.recorder.record();
+    }
+
+    createBuffer(buffers, channelTotal ) {
+        let channel = 0;
+        const buffer = this.audioContext.createBuffer(channelTotal, buffers[0].length, this.audioContext.sampleRate);
+        for (channel = 0; channel < channelTotal; channel += 1) {
+            buffer.getChannelData(channel).set(buffers[channel]);
+        }
+        return buffer;
     }
 
     stopRecord(){
+        const self = this;
+        if ( self.recording ){
+            self.recorder.stop();
+            self.recorder.getBuffer(function (buffers) {
+                const recording = self.createBuffer(buffers, 2);
+                self.setup.source.buffer = recording;
+                self.setup.source.start(0)
+            });
+        }
         this.recording = false;
     }
 
@@ -82,16 +119,16 @@ class Looper extends React.Component {
             <div className="looper-container">
                 <div className="looper-main">
                     <div className="dsp-compass">
-                        <GetCompass value={this.parameters.compass} onChange={this.compassChange.bind(this)}/>
+                        <GetCompass value={this.parameters.compass} onChange={this.compassChange}/>
                     </div>
                     <div className="btn-bpm">
-                        <RoundSelector label="BPM" value={this.parameters.bpm} min="40" max="218" onChange={this.bpmChange.bind(this)} />
+                        <RoundSelector label="BPM" value={this.parameters.bpm} min="40" max="218" onChange={this.bpmChange} />
                     </div>
                     <div className="btn-tempo">
-                        <RoundSelector label="TEMPO" value={this.parameters.tempo} values={["3/4","4/4"]} onChange={this.tempoChange.bind(this)} />
+                        <RoundSelector label="TEMPO" value={this.parameters.tempo} values={["3/4","4/4"]} onChange={this.tempoChange} />
                     </div>
                     <div className="btn-on-off">
-                        <div id="onOff" className={'lp-on-off '+this.state.cls} onClick={this.loopOnOff.bind(this)}  onAnimationEnd={this.onAnimationEnd.bind(this)}>
+                        <div id="onOff" className={'lp-on-off '+this.state.cls} onClick={this.loopOnOff.bind(this)}  onAnimationEnd={this.onAnimationEnd}>
                             <div>
                                 <FontAwesomeIcon icon={faCircle} /> / <FontAwesomeIcon icon={faPause} />
                             </div>
