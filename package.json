@@ -16,7 +16,6 @@
     "next": "10.x",
     "react": "17.x",
     "react-dom": "17.x",
-    "react-switch": "^6.0.0",
-    "rxjs-compat": "^6.6.7"
+    "react-switch": "^6.0.0"
   }
 }

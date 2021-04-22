@@ -4,7 +4,6 @@ import GetCompass from "../GetCompass";
 import { WorkerMetronome } from '../metronome_base.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faPause } from '@fortawesome/free-solid-svg-icons'
-import { scheduled } from "rxjs";
 
 class Looper extends React.Component {
     constructor(props){
