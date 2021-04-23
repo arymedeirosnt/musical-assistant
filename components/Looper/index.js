@@ -4,7 +4,6 @@ import GetCompass from "../GetCompass";
 import { WorkerMetronome } from '../metronome_base.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faPause } from '@fortawesome/free-solid-svg-icons'
-
 class Looper extends React.Component {
     constructor(props){
         super(props);
@@ -48,10 +47,17 @@ class Looper extends React.Component {
         if ( !this.running ){
             const self = this;
             navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+            let supportedConstraints = navigator.mediaDevices.getSupportedConstraints();
+            console.log(supportedConstraints);
+
             this.audioContext = new AudioContext();
             this.audioContext.resume().then(()=>{
                 self.recordSetup();
-                navigator.getUserMedia({audio: true}, function (stream) {
+                navigator.getUserMedia({audio: {
+                    echoCancellation : false,
+                    noiseSuppression : false
+                }}, function (stream) {
                     var input = self.audioContext.createMediaStreamSource(stream);
                     self.recorder = new Recorder(input);
                     self.metronome = new WorkerMetronome(self.parameters.bpm,self.parameters.tempo+3,self.parameters.compass);
