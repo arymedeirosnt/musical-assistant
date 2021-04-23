@@ -7,9 +7,9 @@ class BaseMetronome {
       this.tempo = tempo;
       this.signature = signature;
       this.playing = false;
-      this.compass = compass;
+      this.compass = compass ? compass+1: 0;
       this.recording = false;
-      this.mustCheck = false;
+      this.started = false;
       
       this.audioCtx = null;
       this.tick = null;
@@ -18,7 +18,7 @@ class BaseMetronome {
 
       this.tock = null;
       this.tockVolume = null;
-      this.ticktock = 1;
+      this.ticktock = signature;
 
       this.startRecordFn = ()=>{};
       this.stopRecordFn = ()=>{};
@@ -68,42 +68,39 @@ class BaseMetronome {
     clickAtTime(time) {
 
 
-      if ( !this.recording){
-        // Silence the click.
-        this.tickVolume.gain.cancelScheduledValues(time);
-        this.tickVolume.gain.setValueAtTime(0, time);
+      // Silence the click.
+      this.tickVolume.gain.cancelScheduledValues(time);
+      this.tickVolume.gain.setValueAtTime(0, time);
 
-        // Silence the click.
-        this.tockVolume.gain.cancelScheduledValues(time);
-        this.tockVolume.gain.setValueAtTime(0, time);
-      }
+      // Silence the click.
+      this.tockVolume.gain.cancelScheduledValues(time);
+      this.tockVolume.gain.setValueAtTime(0, time);
 
       if ( this.ticktock === this.signature ){
-        this.mustCheck = true;
-        if ( !this.recording ){
-          this.tockVolume.gain.linearRampToValueAtTime(1, time + .001);
-          this.tockVolume.gain.linearRampToValueAtTime(0, time + .001 + .01);
-        }
-        else{
-          this.compass--;
-        }
-        this.ticktock = 0;  
-      }
-      else{
-          if ( this.mustCheck ){
-            if ( !this.recording ){
+          if ( !this.recording ){
+            if ( !this.started ){
+              this.tockVolume.gain.linearRampToValueAtTime(1, time + .001);
+              this.tockVolume.gain.linearRampToValueAtTime(0, time + .001 + .01);
+              if ( this.compass > 0 ){
+                this.started = true;  
+              }
+            }
+            else{
               this.startRecordFn();
               this.recording = true;
             }
-            else if ( this.compass == 0 ){
-              this.stopRecordFn();
-            }
           }
+          if ( this.compass == 0 ){
+            this.stopRecordFn();
+          }
+          this.ticktock = 0;
+          this.compass--;
+      }
+      else{
           if ( !this.recording ){
             this.tickVolume.gain.linearRampToValueAtTime(1, time + .001);
             this.tickVolume.gain.linearRampToValueAtTime(0, time + .001 + .01);
           }
-
       }
       this.ticktock++
     }
