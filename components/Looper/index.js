@@ -3,11 +3,12 @@ import RoundSelector from "../RoundSelector";
 import GetCompass from "../GetCompass";
 import { WorkerMetronome } from '../metronome_base.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircle, faPause } from '@fortawesome/free-solid-svg-icons'
+import { faCircle, faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
+
 class Looper extends React.Component {
     constructor(props){
         super(props);
-        this.state = { cls: '' };
+        this.state = { cls: '', hasRecord: false };
         this.running = false;
         this.recording = false;
         this.parameters = window.localStorage.getItem("looper") ? JSON.parse(window.localStorage.getItem("looper")) : { bpm: 60, tempo: 1, compass: 4 };
@@ -22,6 +23,7 @@ class Looper extends React.Component {
         this.startRecord = this.startRecord.bind(this);
         this.stopRecord = this.stopRecord.bind(this);
         this.createBuffer = this.createBuffer.bind(this);
+        this.reset = this.reset.bind(this);
     }
 
     componentDidMount(){
@@ -46,29 +48,33 @@ class Looper extends React.Component {
     loopOnOff(){
         if ( !this.running ){
             const self = this;
-            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
-            let supportedConstraints = navigator.mediaDevices.getSupportedConstraints();
-            console.log(supportedConstraints);
-
-            this.audioContext = new AudioContext();
-            this.audioContext.resume().then(()=>{
+            if ( self.state.hasRecord ){
                 self.recordSetup();
-                navigator.getUserMedia({audio: {
-                    echoCancellation : false,
-                    noiseSuppression : false
-                }}, function (stream) {
-                    var input = self.audioContext.createMediaStreamSource(stream);
-                    self.recorder = new Recorder(input);
-                    self.metronome = new WorkerMetronome(self.parameters.bpm,self.parameters.tempo+3,self.parameters.compass);
-                    self.metronome.start(self.beat,self.startRecord,self.stopRecord);    
-                },function(e){});        
-            });
+                self.setup.source.buffer = self.recordingBuffer;
+                self.setup.source.start(0);
+                self.metronome.start(self.beat);
+            }
+            else{
+                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+                this.audioContext = new AudioContext();
+                this.audioContext.resume().then(()=>{
+                    self.recordSetup();
+                    navigator.getUserMedia({audio: {
+                        echoCancellation : false,
+                        noiseSuppression : false
+                    }}, function (stream) {
+                        var input = self.audioContext.createMediaStreamSource(stream);
+                        self.recorder = new Recorder(input);
+                        self.metronome = new WorkerMetronome(self.parameters.bpm,self.parameters.tempo+3,self.parameters.compass);
+                        self.metronome.start(self.beat,self.startRecord,self.stopRecord);    
+                    },function(e){});        
+                });
+            }
         }
         else{
-            this.setup.source.stop();
+            if ( this.state.hasRecord )
+                this.setup.source.stop();
             this.metronome.stop();
-            this.metronome = null;
         }
         this.running = !this.running;
     }
@@ -111,12 +117,25 @@ class Looper extends React.Component {
         if ( self.recording ){
             self.recorder.stop();
             self.recorder.getBuffer(function (buffers) {
-                const recording = self.createBuffer(buffers, 2);
-                self.setup.source.buffer = recording;
-                self.setup.source.start(0)
+                self.recordingBuffer = self.createBuffer(buffers, 2);
+                self.setState({ hasRecord: true});
+                self.setup.source.buffer = self.recordingBuffer;
+                self.setup.source.start(0);
             });
         }
         this.recording = false;
+    }
+
+    reset(){
+        if ( this.state.hasRecord ){
+            if ( this.running ){
+                this.setup.source.stop();
+                this.recordingBuffer = null;
+            }
+        }
+        this.metronome.stop();
+        this.setState({ hasRecord: false});
+        this.running = false;
     }
 
     render(){
@@ -133,13 +152,14 @@ class Looper extends React.Component {
                         <RoundSelector label="TEMPO" value={this.parameters.tempo} values={["3/4","4/4"]} onChange={this.tempoChange} />
                     </div>
                     <div className="btn-on-off">
-                        <div id="onOff" className={'lp-on-off '+this.state.cls} onClick={this.loopOnOff.bind(this)}  onAnimationEnd={this.onAnimationEnd}>
+                        <div id="onOff" className={'lp-on-off '+this.state.cls} onClick={this.loopOnOff}  onAnimationEnd={this.onAnimationEnd}>
                             <div>
-                                <FontAwesomeIcon icon={faCircle} /> / <FontAwesomeIcon icon={faPause} />
+                                <FontAwesomeIcon icon={this.state.hasRecord ? faPlay : faCircle} /> / <FontAwesomeIcon icon={faPause} />
                             </div>
                         </div>
                     </div>
                 </div>
+                <div className={'reset'+(this.state.hasRecord ? ' active':'')} onClick={this.reset}>RESET</div>
                 <div className="stripe">
                 <div>
                     Looper

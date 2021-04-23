@@ -322,7 +322,30 @@ footer {
   border-radius: 50%;
   box-shadow: 0 0 0 3px #e5e5e6, inset 0 0 0 4px #A0A0A0,inset 0 0 0 8px #e5e5e6;
   background-color: white;
+  z-index: 2;
 }
+
+.looper-container .reset{
+  width: 70px;
+  height: 70px;
+  position: relative;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px #e5e5e6, inset 0 0 0 4px #A0A0A0,inset 0 0 0 8px #e5e5e6;
+  background-color: rgb(207, 14, 14);
+  color: white;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  position:relative;
+  top: -20px;
+  left: 120px;
+  display: none;;
+}
+
+.looper-container .reset.active{
+  display: flex;
+}
+
 
 .looper-main .lp-on-off {
   width: 70px;
@@ -467,6 +490,5 @@ footer {
   top: 45px;
   left: 75px;
 }
-
 
 

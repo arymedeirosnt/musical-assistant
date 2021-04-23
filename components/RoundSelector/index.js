@@ -10,42 +10,42 @@ class RoundSelector extends React.Component {
         this.max = props.max ? parseInt(props.max) : 100;
 
         if ( props.values ){
-            this.state.canUp = this.state.value > 0;
-            this.state.canDown = this.state.value < (props.values.length -1);
+            this.state.canDown = this.state.value > 0;
+            this.state.canUp = this.state.value < (props.values.length -1);
         }
         else{
-            this.state.canUp = this.state.value > this.min;
-            this.state.canDown = this.state.value < this.max;
+            this.state.canDown = this.state.value > this.min;
+            this.state.canUp = this.state.value < this.max;
         }
         this.onUp = this.onUp.bind(this);
         this.onDown = this.onDown.bind(this);
 
     }
 
-    onUp(){
-        if ( !this.state.canUp )
+    onDown(){
+        if ( !this.state.canDown )
             return;
 
         const value = this.state.value - 1;
         if ( this.props.values ){
-            this.setState({value: value, canUp : value > 0, canDown : value < this.props.values.length-1 });
+            this.setState({value: value, canDown : value > 0, canUp : value < this.props.values.length-1 });
         }
         else{
-            this.setState({ value: value, canUp: value > this.min, canDown: value < this.max });
+            this.setState({ value: value, canDown: value > this.min, canUp: value < this.max });
         }
         this.onChange(value);
     }
 
-        onDown(){
-        if ( !this.state.canDown )
+    onUp(){
+        if ( !this.state.canUp )
             return;
 
         const value = this.state.value + 1
         if (this.props.values ){
-            this.setState({value: value, canUp : value > 0, canDown: value < this.props.values.length-1});
+            this.setState({value: value, canDown : value > 0, canUp: value < this.props.values.length-1});
         }
         else{
-            this.setState({ value: value, caUp: value > this.min, canDown: value < this.max});
+            this.setState({ value: value, canDown: value > this.min, canUp: value < this.max});
         }
         this.onChange(value);
     }
