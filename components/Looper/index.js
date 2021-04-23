@@ -121,6 +121,7 @@ class Looper extends React.Component {
                 self.setState({ hasRecord: true});
                 self.setup.source.buffer = self.recordingBuffer;
                 self.setup.source.start(0);
+                self.metronome.stop();
             });
         }
         this.recording = false;
