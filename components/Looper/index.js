@@ -59,7 +59,10 @@ class Looper extends React.Component {
                 this.audioContext = new AudioContext();
                 this.audioContext.resume().then(()=>{
                     self.recordSetup();
-                    navigator.getUserMedia({audio: true, video: false}, function (stream) {
+                    navigator.getUserMedia({audio: {
+                        echoCancellation: false,
+                        autoGainControl: false
+                    }, video: false}, function (stream) {
                         var input = self.audioContext.createMediaStreamSource(stream);
                         self.recorder = new Recorder(input);
                         self.metronome = new WorkerMetronome(self.parameters.bpm,self.parameters.tempo+3,self.parameters.compass);
