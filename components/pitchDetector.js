@@ -92,7 +92,10 @@ class PitchDetector{
         if ( !this._audioContext ){
             this._audioContext = new AudioContext();
             this.MAX_SIZE = Math.max(4,Math.floor(this._audioContext.sampleRate/5000));
-            this.getUserMedia({ audio: true, video : false },this.gotStream);
+            this.getUserMedia({audio: {
+                echoCancellation: false,
+                autoGainControl: false
+            }, video: false},this.gotStream);
         }
         else{
             this.running = true;
