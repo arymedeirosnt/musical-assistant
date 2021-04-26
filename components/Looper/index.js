@@ -59,10 +59,7 @@ class Looper extends React.Component {
                 this.audioContext = new AudioContext();
                 this.audioContext.resume().then(()=>{
                     self.recordSetup();
-                    navigator.getUserMedia({audio: {
-                        echoCancellation : false,
-                        noiseSuppression : false
-                    }}, function (stream) {
+                    navigator.getUserMedia({audio: true, video: false}, function (stream) {
                         var input = self.audioContext.createMediaStreamSource(stream);
                         self.recorder = new Recorder(input);
                         self.metronome = new WorkerMetronome(self.parameters.bpm,self.parameters.tempo+3,self.parameters.compass);
@@ -83,7 +80,7 @@ class Looper extends React.Component {
         this.setup = {};
         this.setup.source = this.audioContext.createBufferSource();
         this.setup.gainNode = this.audioContext.createGain();
-        this.setup.gainNode.gain.setValueAtTime(0.9, this.audioContext.currentTime);
+        //this.setup.gainNode.gain.setValueAtTime(0.9, this.audioContext.currentTime);
         if (!this.setup.source.start) { this.setup.source.start = this.setup.source.noteOn; }
         if (!this.setup.source.stop) { this.setup.source.stop = this.setup.source.noteOff; }
         this.setup.source.connect(this.setup.gainNode);
