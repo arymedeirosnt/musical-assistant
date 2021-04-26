@@ -80,7 +80,7 @@ class Looper extends React.Component {
         this.setup = {};
         this.setup.source = this.audioContext.createBufferSource();
         this.setup.gainNode = this.audioContext.createGain();
-        //this.setup.gainNode.gain.setValueAtTime(0.9, this.audioContext.currentTime);
+        this.setup.gainNode.gain.setValueAtTime(0.75, this.audioContext.currentTime);
         if (!this.setup.source.start) { this.setup.source.start = this.setup.source.noteOn; }
         if (!this.setup.source.stop) { this.setup.source.stop = this.setup.source.noteOff; }
         this.setup.source.connect(this.setup.gainNode);
